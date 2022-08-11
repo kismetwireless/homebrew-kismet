@@ -23,12 +23,13 @@ class Kismet < Formula
   depends_on "libusb" 
   depends_on "openssl" 
   depends_on "libwebsockets"
+  depends_on "libbladerf"
 
   def install
     ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
-    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--disable-python-tools"
+    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools"
     system "make", "install"
   end
 end
