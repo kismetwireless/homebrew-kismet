@@ -30,7 +30,7 @@ class KismetGit < Formula
     ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
-    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools"
+    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--with-openssl=#{Formula[openssl]}"
     system "make", "install"
   end
 end
