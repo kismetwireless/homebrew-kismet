@@ -26,11 +26,15 @@ class KismetGit < Formula
   depends_on "libwebsockets"
   depends_on "libbladerf"
 
+  conflicts_with "kismet", because: "Install either kismet-git or release kismet"
+
   def install
     ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
     system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--with-openssl=#{Formula[openssl]}"
     system "make", "install"
+    bin.install "packaging/kismet_macos_configure_suid" "kismet_macos_configure_suid"
+    ohai "The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi) needs to be configured to be suid-root in order to be able to reconfigure the network interfaces.  Read more about it at https://www.kismetwireless.net/docs/readme/suid/#why-does-kismet-need-root .  To change the permissions on the Kismet capture tool, run 'sudo kismet_macos_configure_suid' .  This only needs to be done once per install."
   end
 end
