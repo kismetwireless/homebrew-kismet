@@ -35,6 +35,6 @@ class KismetGit < Formula
     system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--with-openssl=#{Formula["openssl"].opt_prefix}"
     system "make", "install"
     bin.install "packaging/kismet_macos_configure_suid" => "kismet_macos_configure_suid"
-    ohai "The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi)\nneeds to be configured to be suid-root in order to be able to\nreconfigure the network interfaces.  Read more about it at \nhttps://www.kismetwireless.net/docs/readme/suid/#why-does-kismet-need-root\nTo change the permissions on the Kismet capture tool, run \n'sudo kismet_macos_configure_suid'\nThis only needs to be done once per install."
+    ohai "The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi)\nneeds to be configured to be suid-root in order to be able to\nreconfigure the network interfaces.  Read more about it at \nhttps://www.kismetwireless.net/docs/readme/suid/#why-does-kismet-need-root\nTo change the permissions on the Kismet capture tool, run \nsudo /opt/homebrew/bin/kismet_macos_configure_suid\nThis only needs to be done once per install."
   end
 end
