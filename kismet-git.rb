@@ -35,12 +35,28 @@ class KismetGit < Formula
     system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--with-openssl=#{Formula["openssl"].opt_prefix}"
     system "make", "install"
     bin.install "packaging/kismet_macos_configure_suid" => "kismet_macos_configure_suid"
-    ohai "The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi)"
-    ohai "needs to be be suid-root in order to be able to reconfigure the network "
-    ohai "interfaces.  Read more about it at "
-    ohai "https://www.kismetwireless.net/docs/readme/suid/#why-does-kismet-need-root"
-    ohai "To change the permissions on the Kismet capture tool, run "
-    ohai "sudo /opt/homebrew/bin/kismet_macos_configure_suid"
-    ohai "This only needs to be done once per install."
+  end
+
+  def caveats
+    on_macos do
+      <<~EOS
+        The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi) 
+        needs to be suid-root in order to have the required permissions to reconfigure 
+        airport interfaces.  You can read more about installing as suid-root at 
+
+        https://www.kismetwireless.net/docs/readme/suid/#why-does-kismet-need-root
+
+        To change the permissions on the Kismet capture tool, either run the script 
+        installed by Kismet via: 
+
+        sudo /opt/homebrew/bin/kismet_macos_configure_suid 
+
+        or by manually setting ownership of the capture tool to root and setting 
+        the suid bit: 
+
+        chown root /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi 
+        chmod 4755 /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi
+      EOS
+    end
   end
 end
