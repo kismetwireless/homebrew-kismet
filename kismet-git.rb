@@ -25,11 +25,12 @@ class KismetGit < Formula
   depends_on "openssl" 
   depends_on "libwebsockets"
   depends_on "libbladerf"
+  depends_on "mosquitto"
 
   conflicts_with "kismet", because: "Install either kismet-git or release kismet"
 
   def install
-    ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
+    ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include} -I#{Formula["mosquitto"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
     system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--with-openssl=#{Formula["openssl"].opt_prefix}"
