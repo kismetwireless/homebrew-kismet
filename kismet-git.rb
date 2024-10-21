@@ -43,9 +43,9 @@ class KismetGit < Formula
       <<~EOS
         The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi) 
         needs to be suid-root in order to have the required permissions to reconfigure 
-        airport interfaces.  You can read more about installing as suid-root at 
+        airport interfaces.  You can read more about the need for root permissions at
 
-        https://www.kismetwireless.net/docs/readme/suid/#why-does-kismet-need-root
+        https://www.kismetwireless.net/docs/readme/datasources/wifi-macos/
 
         To change the permissions on the Kismet capture tool, either run the script 
         installed by Kismet via: 
