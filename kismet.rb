@@ -1,5 +1,5 @@
 # Kismet release Formula
-# 
+#
 # Does not build python modules - need to make custom packages for them
 #
 # Does not install suidroot
@@ -19,15 +19,27 @@ class Kismet < Formula
   depends_on "pcre"
   depends_on "librtlsdr"
   depends_on "libbtbb"
-  depends_on "ubertooth" 
-  depends_on "libusb" 
-  depends_on "openssl" 
+  depends_on "ubertooth"
+  depends_on "libusb"
+  depends_on "openssl"
   depends_on "libwebsockets"
   depends_on "libbladerf"
 
   conflicts_with "kismet-git", because: "Install either kismet-git or release kismet"
 
   def install
+    on_macos do
+      <<~EOS
+        For macOS you almost definitely want to be installing the kismet-git nightly
+        code, which addresses several issues with the more modern clang included on
+        macOS.
+
+        Additionally, due to changes made in recent macOS versions, it may not be
+        possible to enable monitor mode or change channel on the built-in WiFi
+        card, making Kismet useful primarily with remote sources (some SDR sources
+        may still work as well)
+      EOS
+    end
     ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
@@ -39,22 +51,27 @@ class Kismet < Formula
   def caveats
     on_macos do
       <<~EOS
-        The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi) 
-        needs to be suid-root in order to have the required permissions to reconfigure 
+        The macOS packet capture component of Kismet (kismet_cap_osx_corewlan_wifi)
+        needs to be suid-root in order to have the required permissions to reconfigure
         airport interfaces.  You can read more about the need for root permissions at
 
         https://www.kismetwireless.net/docs/readme/datasources/wifi-macos/
 
-        To change the permissions on the Kismet capture tool, either run the script 
-        installed by Kismet via: 
+        To change the permissions on the Kismet capture tool, either run the script
+        installed by Kismet via:
 
-        sudo /opt/homebrew/bin/kismet_macos_configure_suid 
+        sudo /opt/homebrew/bin/kismet_macos_configure_suid
 
-        or by manually setting ownership of the capture tool to root and setting 
-        the suid bit: 
+        or by manually setting ownership of the capture tool to root and setting
+        the suid bit:
 
-        chown root /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi 
+        chown root /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi
         chmod 4755 /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi
+
+        Additionally, due to changes made in recent macOS versions, it may not be
+        possible to enable monitor mode or change channel on the built-in WiFi
+        card, making Kismet useful primarily with remote sources (some SDR sources
+        may still work as well)
       EOS
     end
   end
