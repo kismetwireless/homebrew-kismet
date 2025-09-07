@@ -7,15 +7,15 @@
 class Kismet < Formula
   desc "Kismet Wi-Fi and Wireless Sniffer"
   homepage "https://www.kismetwireless.net"
-  url "https://github.com/kismetwireless/kismet/archive/refs/tags/kismet-2023-07-R1.zip"
-  sha256 "8c2f18014e10d486678f4c09bc23339ea8b36169b46335f67071ed97fedbb235"
+  url "https://github.com/kismetwireless/kismet/archive/refs/tags/kismet-2025-09-R1.zip"
+  sha256 "fd9e20de64192fb922b58a22341b8b94d8e6bc46bfdec7ac4b26703ee52044cc"
   license "GPL-2"
 
   depends_on "pkg-config"
   # depends_on "python3"
   depends_on "libpcap"
-  depends_on "protobuf"
-  depends_on "protobuf-c"
+  # depends_on "protobuf"
+  # depends_on "protobuf-c"
   depends_on "pcre"
   depends_on "librtlsdr"
   depends_on "libbtbb"
@@ -24,26 +24,25 @@ class Kismet < Formula
   depends_on "openssl"
   depends_on "libwebsockets"
   depends_on "libbladerf"
+  depends_on "mosquitto"
 
   conflicts_with "kismet-git", because: "Install either kismet-git or release kismet"
 
   def install
     on_macos do
       <<~EOS
-        For macOS you almost definitely want to be installing the kismet-git nightly
-        code, which addresses several issues with the more modern clang included on
-        macOS.
+        Due to changes made in recent macOS versions, it may not be possible to
+        enable monitor mode (or properly control channels in monitor mode) using the
+        built-in Airport Wi-Fi card.
 
-        Additionally, due to changes made in recent macOS versions, it may not be
-        possible to enable monitor mode or change channel on the built-in WiFi
-        card, making Kismet useful primarily with remote sources (some SDR sources
-        may still work as well)
+        Unfortunately this reduces Kismet functionality to working with remote
+        datasources and some SDR radios.
       EOS
     end
     ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
-    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--with-openssl=#{Formula["openssl"].opt_prefix}"
+    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--enable-homebrew"
     system "make", "install"
     bin.install "packaging/kismet_macos_configure_suid" => "kismet_macos_configure_suid"
   end
