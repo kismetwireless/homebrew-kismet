@@ -67,10 +67,10 @@ class Kismet < Formula
         chown root /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi
         chmod 4755 /opt/homebrew/bin/kismet_cap_osx_corewlan_wifi
 
-        Additionally, due to changes made in recent macOS versions, it may not be
-        possible to enable monitor mode or change channel on the built-in WiFi
-        card, making Kismet useful primarily with remote sources (some SDR sources
-        may still work as well)
+        It appears that with the release of macOS 26 (tahoe), monitor mode once again
+        works properly on macOS with the built-in airport/wifi cards, restoring
+        Kismet functionality.  Earlier releases of macOS, especially macOS 15 (sequoia)
+        may not properly tune channels.
       EOS
     end
   end
