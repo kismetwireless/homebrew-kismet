@@ -33,7 +33,7 @@ class KismetGit < Formula
     #ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include} -I#{Formula["mosquitto"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
-    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-usbwifi", "--enable-bladerf", "--disable-python-tools", "--enable-homebrew"
+    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--enable-homebrew"
     system "make"
     system "make", "install"
     bin.install "packaging/kismet_macos_configure_suid" => "kismet_macos_configure_suid"
@@ -64,12 +64,17 @@ class KismetGit < Formula
         Kismet functionality.  Earlier releases of macOS, especially macOS 15 (sequoia)
         may not properly tune channels.
 
-        Kismet can also capture with supported USB Wi-Fi adapters (currently the
-        MediaTek MT7921AU) using Linux drivers running in userspace, which does not
-        need root or the built-in Wi-Fi card.  Adapters are named by driver, for
+        Kismet can also capture with supported USB Wi-Fi adapters (MediaTek MT7921U,
+        MT7925U, and MT7612U) using Linux drivers running in userspace, which does
+        not need root or the built-in Wi-Fi card.  Adapters are named by driver, for
         example:
 
         kismet -c mt7921-0
+
+        Wi-Fi HaLow (802.11ah) is captured with Morse Micro MM8108 USB adapters, also
+        using a userspace driver:
+
+        kismet -c mm8108-0
       EOS
     end
   end
