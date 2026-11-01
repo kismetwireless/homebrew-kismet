@@ -7,8 +7,8 @@
 class Kismet < Formula
   desc "Kismet Wi-Fi and Wireless Sniffer"
   homepage "https://www.kismetwireless.net"
-  url "https://github.com/kismetwireless/kismet/archive/refs/tags/kismet-2025-09-R1.zip"
-  sha256 "fd9e20de64192fb922b58a22341b8b94d8e6bc46bfdec7ac4b26703ee52044cc"
+  url "https://github.com/kismetwireless/kismet/archive/refs/tags/kismet-2026-10-R1.zip"
+  sha256 "a22b7b62e7a79689f57de99dd5037c7fc48dab062a7fe2cd46e267d69c91fc3d"
   license "GPL-2"
 
   depends_on "pkg-config"
@@ -16,7 +16,7 @@ class Kismet < Formula
   depends_on "libpcap"
   # depends_on "protobuf"
   # depends_on "protobuf-c"
-  depends_on "pcre"
+  depends_on "pcre2"
   depends_on "librtlsdr"
   depends_on "libbtbb"
   depends_on "ubertooth"
@@ -25,20 +25,12 @@ class Kismet < Formula
   depends_on "libwebsockets"
   depends_on "libbladerf"
   depends_on "mosquitto"
+  depends_on "xz"
+  depends_on "zstd"
 
   conflicts_with "kismet-git", because: "Install either kismet-git or release kismet"
 
   def install
-    on_macos do
-      <<~EOS
-        Due to changes made in recent macOS versions, it may not be possible to
-        enable monitor mode (or properly control channels in monitor mode) using the
-        built-in Airport Wi-Fi card.
-
-        Unfortunately this reduces Kismet functionality to working with remote
-        datasources and some SDR radios.
-      EOS
-    end
     ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
@@ -71,6 +63,18 @@ class Kismet < Formula
         works properly on macOS with the built-in airport/wifi cards, restoring
         Kismet functionality.  Earlier releases of macOS, especially macOS 15 (sequoia)
         may not properly tune channels.
+
+        Kismet can also capture with supported USB Wi-Fi adapters (MediaTek MT7921U,
+        MT7925U, and MT7612U) using Linux drivers running in userspace, which does
+        not need root or the built-in Wi-Fi card.  Adapters are named by driver, for
+        example:
+
+        kismet -c mt7921-0
+
+        Wi-Fi HaLow (802.11ah) is captured with Morse Micro MM8108 USB adapters, also
+        using a userspace driver:
+
+        kismet -c mm8108-0
       EOS
     end
   end
