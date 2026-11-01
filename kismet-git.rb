@@ -17,7 +17,7 @@ class KismetGit < Formula
   depends_on "libpcap"
   # depends_on "protobuf"
   # depends_on "protobuf-c"
-  depends_on "pcre"
+  depends_on "pcre2"
   depends_on "librtlsdr"
   depends_on "libbtbb"
   depends_on "ubertooth"
@@ -26,6 +26,8 @@ class KismetGit < Formula
   depends_on "libwebsockets"
   depends_on "libbladerf"
   depends_on "mosquitto"
+  depends_on "xz"
+  depends_on "zstd"
 
   conflicts_with "kismet", because: "Install either kismet-git or release kismet"
 
@@ -33,7 +35,7 @@ class KismetGit < Formula
     #ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include} -I#{Formula["mosquitto"].include}"
     ENV.append "INSTUSR", "${USER}"
     ENV.append "INSTGRP", "staff"
-    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--disable-python-tools", "--enable-homebrew"
+    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--enable-homebrew"
     system "make"
     system "make", "install"
     bin.install "packaging/kismet_macos_configure_suid" => "kismet_macos_configure_suid"
