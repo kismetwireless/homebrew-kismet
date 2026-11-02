@@ -34,8 +34,8 @@ class KismetGit < Formula
   def install
     #ENV.append "CPPFLAGS", "-I#{Formula["openssl"].include} -I#{Formula["mosquitto"].include}"
     ENV.append "INSTUSR", "${USER}"
-    ENV.append "INSTGRP", "staff"
-    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--enable-homebrew"
+    ENV.append "INSTGRP", Process.gid.to_s
+    system "./configure", *std_configure_args, "--disable-silent-rules", "--enable-wifi-coconut", "--enable-bladerf", "--enable-homebrew", "--with-suidgroup=#{Process.gid}"
     system "make"
     system "make", "install"
     bin.install "packaging/kismet_macos_configure_suid" => "kismet_macos_configure_suid"
